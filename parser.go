@@ -1,4 +1,4 @@
-package main
+package argsparser
 
 import (
 	"errors"
@@ -65,6 +65,7 @@ func (ap *ArgsParser) regFlag(i int, st *reflect.StructField) {
 
 	}
 }
+
 func (ap *ArgsParser) injectValues() {
 	value := reflect.ValueOf(ap.args).Elem()
 	for i, v := range ap.values {

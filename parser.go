@@ -45,6 +45,10 @@ func (ap *ArgsParser) register() error {
 	at := argv.Type()
 	fieldsNum := at.NumField()
 	ap.values = make([]interface{}, fieldsNum)
+	for i := 0; i < fieldsNum; i++ {
+		fv := at.Field(i)
+		ap.regFlag(i, &fv)
+	}
 	return nil
 }
 func (ap *ArgsParser) regFlag(i int, st *reflect.StructField) {

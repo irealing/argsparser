@@ -60,9 +60,9 @@ func (ap *ArgsParser) regFlag(i int, st *reflect.StructField) {
 	switch st.Type.Kind() {
 	case reflect.String:
 		ap.values[i] = flag.String(param, emptyString, usage)
-	case reflect.Int:
+	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
 		ap.values[i] = flag.Int(param, 0, usage)
-	case reflect.Uint:
+	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
 		ap.values[i] = flag.Uint(param, 0, usage)
 	case reflect.Bool:
 		ap.values[i] = flag.Bool(param, false, usage)
@@ -79,10 +79,10 @@ func (ap *ArgsParser) injectValues() {
 		case *string:
 			s := v.(*string)
 			value.Field(i).SetString(*s)
-		case *int:
+		case *int, *int8, *int16, *int32, *int64:
 			iv := v.(*int)
 			value.Field(i).SetInt(int64(*iv))
-		case *uint:
+		case *uint, *uint8, *uint16, *uint32, *uint64:
 			uiv := v.(*uint)
 			value.Field(i).SetUint(uint64(*uiv))
 		case *bool:

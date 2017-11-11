@@ -18,8 +18,8 @@ $ go get github.com/irealing/argsparser
 ```golang
 // 实现Arguments接口
 type AppConfig struct{
-    X int `param:"x",usage:"int value"`
-    Y string `param:"y",usage:"string value"`
+    X int `param:"x" usage:"int value"`
+    Y string `param:"y" usage:"string value"`
 }
 
 func (ac *AppConfig) Validate()error{

@@ -16,3 +16,4 @@
 .glide/
 
 .idea/
+*_debug.go

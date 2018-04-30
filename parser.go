@@ -4,6 +4,7 @@ import (
 	"errors"
 	"reflect"
 	"flag"
+	"os"
 )
 
 const (
@@ -21,13 +22,21 @@ type Arguments interface {
 }
 
 type ArgsParser struct {
-	args   Arguments
-	values []interface{}
+	args    Arguments
+	values  []interface{}
+	flagSet *flag.FlagSet
 }
 
 // New Create new ArgsParser object
 func New(args Arguments) *ArgsParser {
-	return &ArgsParser{args: args}
+	return newParser(os.Args[0], args)
+}
+
+func newParser(name string, args Arguments) *ArgsParser {
+	return &ArgsParser{
+		args:    args,
+		flagSet: flag.NewFlagSet(name, flag.ExitOnError),
+	}
 }
 
 // Init Init the ArgsParser
@@ -59,13 +68,13 @@ func (ap *ArgsParser) regFlag(i int, st *reflect.StructField) {
 	}
 	switch st.Type.Kind() {
 	case reflect.String:
-		ap.values[i] = flag.String(param, emptyString, usage)
+		ap.values[i] = ap.flagSet.String(param, emptyString, usage)
 	case reflect.Int, reflect.Int8, reflect.Int16, reflect.Int32, reflect.Int64:
-		ap.values[i] = flag.Int(param, 0, usage)
+		ap.values[i] = ap.flagSet.Int(param, 0, usage)
 	case reflect.Uint, reflect.Uint8, reflect.Uint16, reflect.Uint32, reflect.Uint64:
-		ap.values[i] = flag.Uint(param, 0, usage)
+		ap.values[i] = ap.flagSet.Uint(param, 0, usage)
 	case reflect.Bool:
-		ap.values[i] = flag.Bool(param, false, usage)
+		ap.values[i] = ap.flagSet.Bool(param, false, usage)
 
 	}
 }
@@ -94,7 +103,11 @@ func (ap *ArgsParser) injectValues() {
 
 // Parse Parse args and inject values into Arguments object
 func (ap *ArgsParser) Parse() error {
-	flag.Parse()
+	return ap.ParseValues(os.Args[1:])
+}
+
+func (ap *ArgsParser) ParseValues(values []string) error {
+	ap.flagSet.Parse(values)
 	ap.injectValues()
 	err := ap.args.Validate()
 	if err != nil {

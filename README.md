@@ -42,3 +42,15 @@ func main(){
     fmt.Printf("ac.X: %d\n;ac.Y: %s",ac.X,ac.Y)
 }
 ```
+#### 使用CMDHolder
+
+```golang
+func main() {
+	cfg := new(AppConfig)
+	h := argsparser.NewHolder("about")
+	h.Register("print", "输出", cfg, func() {
+		fmt.Println(cfg)
+	})
+	h.Execute()
+}
+```

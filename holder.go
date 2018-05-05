@@ -19,13 +19,13 @@ type cpPair struct {
 
 type holder struct {
 	container map[string]*cpPair
-	helpInfo  string
+	name      string
 }
 
-func NewHolder(about string) ParserHolder {
+func NewHolder(name string) ParserHolder {
 	return &holder{
 		container: make(map[string]*cpPair),
-		helpInfo:  about,
+		name:      name,
 	}
 }
 func (h holder) Execute() {
@@ -49,6 +49,7 @@ func (h holder) Execute() {
 	cp.Callback()
 }
 func (h holder) printDefault() {
+	os.Stderr.WriteString(h.name)
 	for k, v := range h.container {
 		os.Stderr.WriteString("\n\t")
 		os.Stderr.WriteString(k)

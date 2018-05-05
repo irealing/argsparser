@@ -9,11 +9,12 @@ type Callable func()
 
 type ParserHolder interface {
 	Execute()
-	Register(name string, param Arguments, callable Callable)
+	Register(name string, usage string, param Arguments, callable Callable)
 }
 type cpPair struct {
 	Param    Arguments
 	Callback Callable
+	Usage    string
 }
 
 type holder struct {
@@ -48,10 +49,17 @@ func (h holder) Execute() {
 	cp.Callback()
 }
 func (h holder) printDefault() {
+	for k, v := range h.container {
+		os.Stderr.WriteString("\n\t")
+		os.Stderr.WriteString(k)
+		os.Stderr.WriteString("\n\t\t")
+		os.Stderr.WriteString(v.Usage)
+	}
+	os.Stderr.WriteString("\nCommand create by ArgsParser")
 }
 func (h holder) printError(err error) {
 	fmt.Fprintf(os.Stderr, "failed to init arparser %v", err)
 }
-func (h holder) Register(name string, param Arguments, callable Callable) {
-	h.container[name] = &cpPair{Param: param, Callback: callable}
+func (h holder) Register(name string, usage string, param Arguments, callable Callable) {
+	h.container[name] = &cpPair{Param: param, Callback: callable, Usage: usage}
 }

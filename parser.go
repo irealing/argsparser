@@ -115,3 +115,6 @@ func (ap *ArgsParser) ParseValues(values []string) error {
 	}
 	return err
 }
+func (ap *ArgsParser) PrintHelp() {
+	ap.flagSet.PrintDefaults()
+}

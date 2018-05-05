@@ -45,7 +45,12 @@ func (h holder) Execute() {
 		h.printError(err)
 		return
 	}
-	ap.ParseValues(os.Args[2:])
+	err = ap.ParseValues(os.Args[2:])
+	if err != nil {
+		ap.PrintHelp()
+		h.printError(err)
+		return
+	}
 	cp.Callback()
 }
 func (h holder) printDefault() {
@@ -59,7 +64,7 @@ func (h holder) printDefault() {
 	os.Stderr.WriteString("\nCommand create by ArgsParser")
 }
 func (h holder) printError(err error) {
-	fmt.Fprintf(os.Stderr, "failed to init arparser %v", err)
+	fmt.Fprintf(os.Stderr, "execute error: %v", err)
 }
 func (h holder) Register(name string, usage string, param Arguments, callable Callable) {
 	h.container[name] = &cpPair{Param: param, Callback: callable, Usage: usage}

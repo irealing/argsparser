@@ -2,9 +2,9 @@ package argsparser
 
 import (
 	"errors"
-	"reflect"
 	"flag"
 	"os"
+	"reflect"
 )
 
 const (
